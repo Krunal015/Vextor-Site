@@ -1,0 +1,624 @@
+import React, { useState, useEffect } from 'react';
+
+// --- SVG Icons ---
+// (Keeping existing icons, potentially styling them more within components)
+const IconHome = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>;
+const IconInfo = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>;
+const IconBriefcase = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>;
+const IconMail = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>;
+const IconMenu = () => <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>;
+const IconX = () => <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>;
+const IconZap = () => <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>; // Slightly larger
+const IconBarChart = () => <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="16"></line></svg>; // Slightly larger
+const IconUsers = () => <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>; // Slightly larger
+const IconCheckCircle = () => <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>; // Larger for stats
+const IconHeart = () => <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>; // Larger for stats
+const IconUserCheck = () => <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg>; // Larger for stats
+
+// Simple background shape SVG
+const AbstractBgShape = () => (
+  <svg width="100%" height="100%" viewBox="0 0 1440 300" preserveAspectRatio="none" className="absolute inset-0 z-0 opacity-10" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 180C153.6 144 460.8 72 720 72C979.2 72 1286.4 144 1440 180V300H0V180Z" fill="url(#grad)" />
+    <defs>
+      <linearGradient id="grad" x1="720" y1="72" x2="720" y2="300" gradientUnits="userSpaceOnUse">
+        <stop stopColor="white" stopOpacity="0.5"/>
+        <stop offset="1" stopColor="white" stopOpacity="0"/>
+      </linearGradient>
+    </defs>
+  </svg>
+);
+
+
+// --- Page Components ---
+
+// Home Page Component
+function HomePage({ navigateTo }) {
+  return (
+    <div className="animate-fadeIn space-y-20 md:space-y-28 pb-20 overflow-x-hidden"> {/* Increased spacing */}
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-br from-blue-700 to-indigo-800 text-white pt-28 pb-24 px-6 text-center rounded-b-2xl shadow-xl overflow-hidden">
+        <AbstractBgShape /> {/* Added background shape */}
+        <div className="relative z-10">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-5 drop-shadow-lg animate-slideInUp font-heading"> {/* Added animation & font */}
+            Transform Your Business with Vextor
+          </h1>
+          <p className="text-xl md:text-2xl text-indigo-100 mb-10 max-w-3xl mx-auto animate-slideInUp animation-delay-200">
+            Expert Salesforce solutions in Ahmedabad, delivering innovative CRM strategies that drive growth and efficiency.
+          </p>
+          <button
+            onClick={() => navigateTo('contact')}
+            className="bg-white text-indigo-700 font-bold py-3 px-10 rounded-full shadow-lg hover:bg-teal-300 hover:text-indigo-900 transform hover:scale-105 hover:-translate-y-1 transition duration-300 ease-in-out animate-slideInUp animation-delay-400" // Enhanced hover & accent color
+          >
+            Get Started Today
+          </button>
+        </div>
+      </section>
+
+       {/* Stats Section */}
+       <section className="max-w-5xl mx-auto px-6 lg:px-8 py-10 bg-white rounded-xl shadow-xl -mt-32 relative z-20 animate-sectionIn"> {/* Enhanced styling */}
+         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 text-center">
+           <div className="p-4">
+             <div className="text-indigo-600 mb-4 inline-block"><IconCheckCircle /></div>
+             <p className="text-4xl font-bold text-gray-900 mb-1 animate-countUp">15+</p> {/* Added animation class */}
+             <p className="text-gray-600 font-medium text-lg">Projects Completed</p>
+           </div>
+           <div className="p-4 border-t md:border-t-0 md:border-l md:border-r border-gray-200">
+             <div className="text-red-500 mb-4 inline-block"><IconHeart /></div>
+             <p className="text-4xl font-bold text-gray-900 mb-1 animate-countUp animation-delay-200">10+</p> {/* Added animation class */}
+             <p className="text-gray-600 font-medium text-lg">Happy Clients</p>
+           </div>
+           <div className="p-4 border-t md:border-t-0 border-gray-200">
+             <div className="text-green-600 mb-4 inline-block"><IconUserCheck /></div>
+             <p className="text-4xl font-bold text-gray-900 mb-1 animate-countUp animation-delay-400">5+</p> {/* Added animation class */}
+             <p className="text-gray-600 font-medium text-lg">Expert Team Members</p>
+           </div>
+         </div>
+       </section>
+
+
+      {/* Key Services Section */}
+       <section className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 animate-sectionIn"> {/* Added animation */}
+         <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-14 font-heading">Our Core Salesforce Services</h2> {/* Font heading */}
+         <div className="grid md:grid-cols-3 gap-8 text-center">
+           {/* Service Card 1 */}
+           <div className="bg-white p-8 rounded-lg shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 border-b-4 border-transparent hover:border-teal-400"> {/* Enhanced hover */}
+             <div className="text-blue-600 mb-5 inline-block"><IconZap /></div>
+             <h3 className="text-xl font-semibold text-gray-900 mb-3 font-heading">Consulting & Strategy</h3>
+             <p className="text-gray-600">Tailored Salesforce strategies to meet your unique business objectives.</p>
+           </div>
+            {/* Service Card 2 */}
+           <div className="bg-white p-8 rounded-lg shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 border-b-4 border-transparent hover:border-teal-400"> {/* Enhanced hover */}
+             <div className="text-blue-600 mb-5 inline-block"><IconBarChart /></div>
+             <h3 className="text-xl font-semibold text-gray-900 mb-3 font-heading">Implementation & Customization</h3>
+             <p className="text-gray-600">Seamless setup and custom development for optimal platform use.</p>
+           </div>
+            {/* Service Card 3 */}
+           <div className="bg-white p-8 rounded-lg shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 border-b-4 border-transparent hover:border-teal-400"> {/* Enhanced hover */}
+             <div className="text-blue-600 mb-5 inline-block"><IconUsers /></div>
+             <h3 className="text-xl font-semibold text-gray-900 mb-3 font-heading">Support & Training</h3>
+             <p className="text-gray-600">Ongoing support and user training to maximize your ROI.</p>
+           </div>
+         </div>
+       </section>
+
+      {/* Why Choose Us & Values Section */}
+      <section className="max-w-7xl mx-auto px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-stretch animate-sectionIn"> {/* Added animation, gap, items-stretch */}
+         <div className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 p-8 rounded-xl shadow-lg border border-blue-100 flex flex-col"> {/* Enhanced gradient, border-radius */}
+             <h3 className="text-2xl md:text-3xl font-semibold text-blue-800 mb-6 font-heading">Why Partner with Vextor?</h3>
+             <ul className="list-none space-y-4 text-gray-700 flex-grow"> {/* Increased spacing */}
+                <li className="flex items-start"><span className="text-blue-600 mr-3 mt-1 text-xl">✔</span> <span>Proven expertise in delivering Salesforce solutions.</span></li>
+                <li className="flex items-start"><span className="text-blue-600 mr-3 mt-1 text-xl">✔</span> <span>Experienced, certified professionals based in Ahmedabad.</span></li>
+                <li className="flex items-start"><span className="text-blue-600 mr-3 mt-1 text-xl">✔</span> <span>Dedicated to client success and tangible results.</span></li>
+                <li className="flex items-start"><span className="text-blue-600 mr-3 mt-1 text-xl">✔</span> <span>Focused approach tailored to your specific needs.</span></li>
+             </ul>
+         </div>
+         <div className="bg-gradient-to-br from-green-50 via-teal-50 to-cyan-100 p-8 rounded-xl shadow-lg border border-green-100 flex flex-col"> {/* Enhanced gradient, border-radius */}
+             <h3 className="text-2xl md:text-3xl font-semibold text-green-800 mb-6 font-heading">Our Core Values</h3>
+             <ul className="list-none space-y-4 text-gray-700 flex-grow"> {/* Increased spacing */}
+                <li className="flex items-start"><span className="text-teal-600 mr-3 mt-1 text-xl">◆</span> <strong>Innovation:</strong> Driving progress with creative solutions.</li>
+                <li className="flex items-start"><span className="text-teal-600 mr-3 mt-1 text-xl">◆</span> <strong>Integrity:</strong> Operating with transparency and honesty.</li>
+                <li className="flex items-start"><span className="text-teal-600 mr-3 mt-1 text-xl">◆</span> <strong>Collaboration:</strong> Working closely with clients as partners.</li>
+                <li className="flex items-start"><span className="text-teal-600 mr-3 mt-1 text-xl">◆</span> <strong>Customer Centricity:</strong> Putting your needs at the forefront.</li>
+             </ul>
+         </div>
+      </section>
+
+       {/* Testimonials Section */}
+      <section className="max-w-7xl mx-auto px-6 lg:px-8 text-center animate-sectionIn"> {/* Added animation */}
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-12 font-heading">What Our Clients Say</h2>
+          <div className="grid md:grid-cols-2 gap-10"> {/* Increased gap */}
+              <div className="bg-white p-8 rounded-lg shadow-xl italic border-l-4 border-indigo-500 transform transition duration-300 hover:scale-105"> {/* Enhanced styling */}
+                  <p className="text-gray-700 mb-5 text-lg">"Vextor transformed our sales process with their Salesforce expertise. Highly recommended!"</p>
+                  <p className="font-semibold text-gray-800 not-italic">- Client Name, Industry</p>
+              </div>
+              <div className="bg-white p-8 rounded-lg shadow-xl italic border-l-4 border-teal-500 transform transition duration-300 hover:scale-105"> {/* Enhanced styling */}
+                  <p className="text-gray-700 mb-5 text-lg">"Their team is knowledgeable, responsive, and truly understands our business needs."</p>
+                  <p className="font-semibold text-gray-800 not-italic">- Another Client, Sector</p>
+              </div>
+          </div>
+      </section>
+    </div>
+  );
+}
+
+// About Us Page Component
+function AboutPage() {
+  return (
+    <div className="p-6 md:p-8 animate-fadeIn space-y-16 md:space-y-20"> {/* Increased spacing */}
+      <header className="text-center animate-sectionIn">
+        <h1 className="text-4xl md:text-5xl font-bold text-blue-700 mb-4 font-heading">About Vextor</h1>
+        <p className="text-lg text-gray-600 max-w-3xl mx-auto">Discover our journey, mission, and the passionate team driving Salesforce success in Ahmedabad.</p>
+      </header>
+
+      <section className="grid md:grid-cols-2 gap-10 md:gap-12 items-center bg-white p-8 md:p-10 rounded-xl shadow-xl animate-sectionIn"> {/* Enhanced styling */}
+        <div>
+            <h2 className="text-3xl font-semibold text-blue-600 mb-5 font-heading">Our Story</h2>
+            <p className="text-gray-700 leading-relaxed mb-5">
+              Founded in Ahmedabad, Vextor emerged from a shared passion for leveraging technology to solve real-world business challenges. We saw the transformative potential of Salesforce and set out to become a leading provider for businesses in Gujarat seeking expert CRM solutions.
+            </p>
+            <p className="text-gray-700 leading-relaxed font-medium mb-5 bg-gradient-to-r from-blue-50 to-indigo-100 p-5 rounded-lg border-l-4 border-blue-500 shadow-sm"> {/* Enhanced styling */}
+              As an official <strong className="text-blue-700">Salesforce Partner</strong>, we bring certified expertise and deep platform knowledge, ensuring our clients receive best-in-class service and solutions aligned with Salesforce standards.
+            </p>
+            <p className="text-gray-700 leading-relaxed">
+              We combine this partnership with a commitment to understanding the nuances of your industry. Our growth is fueled by the success stories of our clients.
+            </p>
+        </div>
+        {/* Placeholder for an image - more engaging */}
+        <div className="bg-gradient-to-tr from-indigo-300 to-blue-400 h-72 md:h-full rounded-lg flex items-center justify-center text-white shadow-lg p-6">
+            {/* Simple abstract graphic */}
+            <svg width="80%" height="80%" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="30" cy="30" r="25" stroke="white" strokeWidth="2" opacity="0.5"/>
+              <rect x="50" y="50" width="40" height="40" rx="5" stroke="white" strokeWidth="2" opacity="0.7"/>
+              <path d="M10 80 Q 50 20 90 80" stroke="white" strokeWidth="2" opacity="0.6"/>
+            </svg>
+        </div>
+      </section>
+
+       <section className="bg-gradient-to-r from-teal-500 to-cyan-600 text-white p-10 rounded-xl shadow-lg text-center animate-sectionIn"> {/* Accent color gradient */}
+        <h2 className="text-3xl font-semibold mb-4 font-heading">Our Mission</h2>
+         <p className="leading-relaxed text-xl max-w-3xl mx-auto text-cyan-50">
+           To empower businesses through expert Salesforce implementation and strategic consulting, fostering growth, efficiency, and lasting customer relationships.
+         </p>
+       </section>
+
+        {/* Our Approach Section */}
+       <section className="max-w-7xl mx-auto animate-sectionIn">
+         <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12 font-heading">Our Approach</h2>
+         {/* Enhanced visual flow for approach */}
+         <div className="relative grid md:grid-cols-3 gap-8 md:gap-0">
+            {/* Step 1 */}
+           <div className="relative z-10 bg-white p-6 rounded-lg shadow-lg text-center border-t-4 border-indigo-500">
+             <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-indigo-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg">1</div>
+             <h3 className="text-xl font-semibold text-indigo-700 mt-6 mb-2 font-heading">Discover & Analyze</h3>
+             <p className="text-gray-600 text-sm">We dive deep to understand your processes, challenges, and goals.</p>
+           </div>
+            {/* Connector (Desktop only) */}
+           <div className="hidden md:block absolute top-1/2 left-1/3 w-1/3 h-1 border-t-2 border-dashed border-gray-300 transform -translate-y-1/2"></div>
+            {/* Step 2 */}
+            <div className="relative z-10 bg-white p-6 rounded-lg shadow-lg text-center border-t-4 border-blue-500">
+              <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg">2</div>
+              <h3 className="text-xl font-semibold text-blue-700 mt-6 mb-2 font-heading">Strategize & Design</h3>
+              <p className="text-gray-600 text-sm">We craft a tailored Salesforce roadmap and solution design.</p>
+           </div>
+            {/* Connector (Desktop only) */}
+           <div className="hidden md:block absolute top-1/2 left-2/3 w-1/3 h-1 border-t-2 border-dashed border-gray-300 transform -translate-y-1/2"></div>
+           {/* Step 3 */}
+            <div className="relative z-10 bg-white p-6 rounded-lg shadow-lg text-center border-t-4 border-teal-500">
+              <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-teal-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg">3</div>
+              <h3 className="text-xl font-semibold text-teal-700 mt-6 mb-2 font-heading">Implement & Iterate</h3>
+              <p className="text-gray-600 text-sm">We build, test, and refine the solution, ensuring alignment.</p>
+           </div>
+         </div>
+       </section>
+
+       {/* Placeholder for Team Section */}
+       <section className="max-w-7xl mx-auto animate-sectionIn">
+         <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12 font-heading">Meet the Experts (Placeholder)</h2>
+         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10"> {/* Increased gap */}
+            {/* Team Member Card Example */}
+            <div className="bg-white p-6 rounded-lg shadow-lg text-center transition duration-300 hover:shadow-xl hover:scale-105">
+                <div className="w-28 h-28 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 mx-auto mb-5 flex items-center justify-center text-gray-500 shadow-md">Avatar</div>
+                <h3 className="text-xl font-semibold text-gray-900 font-heading">Team Member Name</h3>
+                <p className="text-indigo-600">Role/Title</p>
+            </div>
+             <div className="bg-white p-6 rounded-lg shadow-lg text-center transition duration-300 hover:shadow-xl hover:scale-105">
+                <div className="w-28 h-28 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 mx-auto mb-5 flex items-center justify-center text-gray-500 shadow-md">Avatar</div>
+                <h3 className="text-xl font-semibold text-gray-900 font-heading">Another Member</h3>
+                <p className="text-indigo-600">Salesforce Consultant</p>
+            </div>
+             <div className="bg-white p-6 rounded-lg shadow-lg text-center transition duration-300 hover:shadow-xl hover:scale-105">
+                <div className="w-28 h-28 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 mx-auto mb-5 flex items-center justify-center text-gray-500 shadow-md">Avatar</div>
+                <h3 className="text-xl font-semibold text-gray-900 font-heading">Lead Developer</h3>
+                <p className="text-indigo-600">Technical Lead</p>
+            </div>
+         </div>
+       </section>
+    </div>
+  );
+}
+
+// Services Page Component
+function ServicesPage() {
+  const services = [
+    { title: "Salesforce Consulting", description: "Strategic guidance, roadmap development, and process optimization.", icon: <IconZap /> },
+    { title: "Implementation & Setup", description: "End-to-end setup of Sales Cloud, Service Cloud, Marketing Cloud, etc.", icon: <IconBarChart /> },
+    { title: "Custom Development", description: "Tailoring Salesforce with Apex, LWC, custom objects, and more.", icon: <IconBriefcase /> }, // Shortened desc
+    { title: "Data Migration & Integration", description: "Seamless data migration and integration with your existing systems.", icon: <IconCheckCircle /> },
+    { title: "Support & Maintenance", description: "Ongoing admin support, troubleshooting, and managed services.", icon: <IconUsers /> },
+    { title: "Salesforce Training", description: "Customized training programs to empower your users and admins.", icon: <IconInfo /> },
+  ];
+
+  return (
+    <div className="p-6 md:p-8 animate-fadeIn">
+      <header className="text-center mb-16 animate-sectionIn"> {/* Increased margin */}
+          <h1 className="text-4xl md:text-5xl font-bold text-blue-700 mb-4 font-heading">Comprehensive Salesforce Services</h1>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            From initial strategy to ongoing support, Vextor provides the expertise you need to succeed with Salesforce.
+          </p>
+      </header>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 animate-sectionIn"> {/* Increased gap */}
+        {services.map((service, index) => (
+          <div key={index} className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 flex flex-col group"> {/* Enhanced styling */}
+            <div className="text-blue-600 mb-5 transform transition-transform duration-300 group-hover:scale-110">{service.icon}</div> {/* Icon hover effect */}
+            <h2 className="text-xl font-semibold text-gray-900 mb-3 font-heading">{service.title}</h2>
+            <p className="text-gray-700 flex-grow mb-4">{service.description}</p>
+             <button className="mt-auto text-sm text-indigo-600 hover:text-teal-700 font-medium self-start transition duration-200 group-hover:translate-x-1">Learn More →</button> {/* Enhanced button */}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+// Contact Page Component
+function ContactPage() {
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevState => ({ ...prevState, [name]: value }));
+     if (isSubmitted) setIsSubmitted(false);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Form data submitted:", formData);
+    setIsSubmitted(true);
+    setFormData({ name: '', email: '', message: '' });
+  };
+
+
+  return (
+    <div className="p-6 md:p-8 animate-fadeIn">
+      <header className="text-center mb-16 animate-sectionIn"> {/* Increased margin */}
+          <h1 className="text-4xl md:text-5xl font-bold text-blue-700 mb-4 font-heading">Get In Touch</h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            We'd love to hear from you! Reach out to discuss your Salesforce needs or ask any questions.
+          </p>
+      </header>
+
+      <div className="grid lg:grid-cols-2 gap-12 md:gap-16 animate-sectionIn"> {/* Increased gap */}
+        {/* Contact Form */}
+        <section className="bg-white p-8 md:p-10 rounded-xl shadow-xl"> {/* Enhanced styling */}
+          <h2 className="text-3xl font-semibold text-gray-800 mb-8 font-heading">Send Us a Message</h2>
+          {isSubmitted && (
+             <div className="mb-6 bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-md text-center">
+                Thank you! We'll be in touch soon.
+             </div>
+          )}
+          <form onSubmit={handleSubmit} className="space-y-6"> {/* Increased spacing */}
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+              <input
+                type="text" id="name" name="name" value={formData.name} onChange={handleChange} required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200 bg-gray-50" // Enhanced input styling
+                placeholder="e.g., Rohan Patel" />
+            </div>
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+              <input
+                type="email" id="email" name="email" value={formData.email} onChange={handleChange} required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200 bg-gray-50" // Enhanced input styling
+                placeholder="you@company.com" />
+            </div>
+            <div>
+              <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Your Message</label>
+              <textarea
+                id="message" name="message" rows="5" value={formData.message} onChange={handleChange} required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200 bg-gray-50" // Enhanced input styling
+                placeholder="Tell us about your project or question..."></textarea>
+            </div>
+            <div>
+              <button
+                type="submit"
+                className="w-full bg-gradient-to-r from-indigo-600 to-blue-700 hover:from-indigo-700 hover:to-blue-800 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-300 ease-in-out" // Enhanced button
+              >
+                Send Message
+              </button>
+            </div>
+          </form>
+        </section>
+
+        {/* Contact Details & Map */}
+        <section className="space-y-10"> {/* Increased spacing */}
+            <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-8 rounded-xl shadow-lg border border-gray-200"> {/* Enhanced styling */}
+              <h2 className="text-3xl font-semibold text-gray-800 mb-8 font-heading">Contact Information</h2>
+               <div className="space-y-6 text-gray-700"> {/* Increased spacing */}
+                    <div className="flex items-start">
+                        <span className="text-blue-600 mt-1 mr-4 text-xl">📍</span> {/* Larger icon */}
+                        <div>
+                            <h3 className="font-semibold text-lg mb-1">Vextor</h3>
+                            <p>123 Innovation Drive, Tech Park</p>
+                            <p>Off SG Highway, Bodakdev</p>
+                            <p>Ahmedabad, Gujarat 380054, India</p>
+                        </div>
+                    </div>
+                   <div className="flex items-center">
+                        <span className="text-blue-600 mr-4 text-xl">✉️</span> {/* Larger icon */}
+                        <a href="mailto:info@vextor.com" className="text-indigo-600 hover:underline hover:text-teal-700 transition duration-200 text-lg">info@vextor.com</a>
+                   </div>
+                   <div className="flex items-center">
+                         <span className="text-blue-600 mr-4 text-xl">📞</span> {/* Larger icon */}
+                        <a href="tel:+919876543210" className="text-gray-800 hover:text-black transition duration-200 text-lg">+91 98765 43210</a>
+                   </div>
+               </div>
+            </div>
+            {/* Embedded Map */}
+           <div className="rounded-xl shadow-lg overflow-hidden border border-gray-200">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d117484.61014127886!2d72.4981388095769!3d23.04900240959015!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e84f521640d7b%3A0x40006a1596861a51!2sAhmedabad%2C%20Gujarat!5e0!3m2!1sen!2sin!4v1711867761350!5m2!1sen!2sin" // Generic Ahmedabad embed URL
+                    width="100%"
+                    height="350"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="Vextor Location Map"
+                ></iframe>
+           </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+// --- Main App Component ---
+export default function App() {
+  const [currentPage, setCurrentPage] = useState('home');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const navigateTo = (page) => {
+    setCurrentPage(page);
+    setIsMobileMenuOpen(false);
+    window.scrollTo(0, 0);
+  };
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'home': return <HomePage navigateTo={navigateTo} />;
+      case 'about': return <AboutPage />;
+      case 'services': return <ServicesPage />;
+      case 'contact': return <ContactPage />;
+      default: return <HomePage navigateTo={navigateTo} />;
+    }
+  };
+
+  const navItems = [
+    { id: 'home', label: 'Home', icon: <IconHome /> },
+    { id: 'about', label: 'About Us', icon: <IconInfo /> },
+    { id: 'services', label: 'Services', icon: <IconBriefcase /> },
+    { id: 'contact', label: 'Contact', icon: <IconMail /> },
+  ];
+
+  // Add global styles and fonts via useEffect
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      /* Font Variables */
+      :root {
+        --font-heading: 'Poppins', sans-serif;
+        --font-body: 'Inter', sans-serif;
+      }
+
+      body {
+        font-family: var(--font-body);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* Apply heading font */
+      .font-heading {
+        font-family: var(--font-heading);
+      }
+
+      /* Page fade-in animation */
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      .animate-fadeIn {
+        animation: fadeIn 0.5s ease-out forwards;
+      }
+
+      /* Section entrance animation */
+      @keyframes sectionIn {
+         from { opacity: 0; transform: translateY(30px); }
+         to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-sectionIn {
+         /* Apply animation - consider using Intersection Observer for true scroll triggering */
+         /* For simplicity, applying directly - might trigger on load */
+         animation: sectionIn 0.7s ease-out forwards;
+         opacity: 0; /* Start hidden */
+         animation-delay: 0.1s; /* Slight delay */
+      }
+
+       /* Hero text animation */
+      @keyframes slideInUp {
+        from { opacity: 0; transform: translateY(40px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-slideInUp {
+        animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        opacity: 0;
+      }
+      .animation-delay-200 { animation-delay: 0.2s; }
+      .animation-delay-400 { animation-delay: 0.4s; }
+
+      /* Simple Count Up Animation (Example for 15) */
+      @keyframes countUp15 {
+        from { content: "0"; }
+        20% { content: "3"; }
+        40% { content: "7"; }
+        60% { content: "11"; }
+        80% { content: "14"; }
+        to { content: "15+"; }
+      }
+       @keyframes countUp10 {
+        from { content: "0"; }
+        25% { content: "2"; }
+        50% { content: "5"; }
+        75% { content: "8"; }
+        to { content: "10+"; }
+      }
+       @keyframes countUp5 {
+        from { content: "0"; }
+        33% { content: "2"; }
+        66% { content: "4"; }
+        to { content: "5+"; }
+      }
+
+      .animate-countUp::before {
+        content: "0"; /* Initial value */
+        display: inline-block;
+        animation-duration: 1.5s;
+        animation-timing-function: ease-out;
+        animation-fill-mode: forwards;
+      }
+      /* Apply specific animations */
+      .animate-countUp:nth-child(1)::before { animation-name: countUp15; } /* Target first stat */
+      .animate-countUp:nth-child(2)::before { animation-name: countUp10; animation-delay: 0.2s;} /* Target second stat */
+      .animate-countUp:nth-child(3)::before { animation-name: countUp5; animation-delay: 0.4s;} /* Target third stat */
+
+       /* Hide original number while animation runs */
+      .animate-countUp {
+        font-size: 0; /* Hide original number */
+      }
+       .animate-countUp::before {
+         font-size: 2.25rem; /* Restore font size for counter (text-4xl) */
+       }
+
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+    `;
+
+    // Add Google Font links
+     const fontLinkInter = document.createElement('link');
+     fontLinkInter.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap';
+     fontLinkInter.rel = 'stylesheet';
+
+     const fontLinkPoppins = document.createElement('link');
+     fontLinkPoppins.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap'; // Weights for headings
+     fontLinkPoppins.rel = 'stylesheet';
+
+    document.head.appendChild(fontLinkInter);
+    document.head.appendChild(fontLinkPoppins);
+    document.head.appendChild(style);
+
+    return () => { // Cleanup function
+      if (document.head.contains(fontLinkInter)) document.head.removeChild(fontLinkInter);
+      if (document.head.contains(fontLinkPoppins)) document.head.removeChild(fontLinkPoppins);
+      if (document.head.contains(style)) document.head.removeChild(style);
+    };
+  }, []);
+
+
+  return (
+    <div className="min-h-screen bg-gray-50 text-gray-800"> {/* Base text color */}
+      {/* Navigation Bar */}
+      <nav className="bg-white/95 backdrop-blur-sm shadow-md sticky top-0 z-50 transition-colors duration-300"> {/* Semi-transparent */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo/Brand Name */}
+            <div className="flex-shrink-0 flex items-center cursor-pointer" onClick={() => navigateTo('home')}>
+              <span className="text-2xl font-bold text-blue-700 font-heading">Vextor</span>
+            </div>
+
+            {/* Desktop Navigation Links */}
+            <div className="hidden sm:ml-6 sm:flex sm:space-x-6">
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => navigateTo(item.id)}
+                  className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-semibold transition duration-200 ease-in-out group ${ // Font semibold
+                    currentPage === item.id
+                      ? 'border-indigo-600 text-gray-900' // Accent border
+                      : 'border-transparent text-gray-500 hover:border-gray-400 hover:text-gray-800'
+                  }`}
+                >
+                   <span className={`mr-2 transition-colors duration-200 ${currentPage === item.id ? 'text-indigo-600' : 'text-gray-400 group-hover:text-gray-600'}`}>{item.icon}</span>
+                  {item.label}
+                </button>
+              ))}
+            </div>
+
+             {/* Mobile Menu Button */}
+             <div className="sm:hidden flex items-center">
+                <button
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    className="inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-indigo-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 transition duration-150"
+                >
+                    <span className="sr-only">Open main menu</span>
+                    {isMobileMenuOpen ? <IconX /> : <IconMenu />}
+                </button>
+             </div>
+          </div>
+        </div>
+
+         {/* Mobile Menu */}
+        <div className={`${isMobileMenuOpen ? 'block' : 'hidden'} sm:hidden border-t border-gray-200 bg-white`} id="mobile-menu"> {/* Added bg-white */}
+            <div className="pt-2 pb-3 space-y-1">
+                 {navItems.map((item) => (
+                    <button
+                        key={item.id}
+                        onClick={() => navigateTo(item.id)}
+                        className={`flex items-center w-full text-left pl-4 pr-4 py-3 border-l-4 text-base font-semibold transition duration-150 ease-in-out group ${ // Font semibold, padding
+                         currentPage === item.id
+                          ? 'bg-indigo-50 border-indigo-600 text-indigo-700' // Accent colors
+                          : 'border-transparent text-gray-600 hover:bg-gray-100 hover:border-gray-300 hover:text-gray-800'
+                        }`}
+                    >
+                       <span className={`mr-3 ${currentPage === item.id ? 'text-indigo-600' : 'text-gray-400 group-hover:text-gray-500'}`}>{item.icon}</span>
+                       {item.label}
+                    </button>
+                ))}
+            </div>
+        </div>
+      </nav>
+
+      {/* Main Content Area */}
+      <main>
+        {renderPage()}
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-gray-400 mt-20 pt-12 pb-8"> {/* Darker footer */}
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 text-center">
+              <div className="mb-5">
+                 <span className="text-2xl font-bold text-white font-heading">Vextor</span>
+              </div>
+              <p className="text-sm mb-2">Empowering Businesses with Salesforce Excellence</p>
+              <p className="text-sm mb-5">Ahmedabad, Gujarat, India</p>
+              {/* Optional: Add social icons here */}
+              <div className="border-t border-gray-700 pt-5 mt-5 text-xs">
+                 &copy; {new Date().getFullYear()} Vextor. All rights reserved.
+              </div>
+          </div>
+      </footer>
+    </div>
+  );
+}
