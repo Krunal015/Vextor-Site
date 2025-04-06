@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Vextor | Salesforce Partner in Ahmedabad</title>
+    <meta name="description" content="Contact Vextor in Ahmedabad, India for Salesforce consulting and services. Fill out our form or find our contact details and location map.">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <nav class="bg-white shadow-md sticky top-0 z-50" id="navbar">
+        <div class="container mx-auto px-6 py-3 md:flex md:justify-between md:items-center">
+            <div class="flex justify-between items-center">
+                <div>
+                    <a href="index.html" class="text-2xl font-bold text-indigo-600 hover:text-indigo-700">Vextor</a>
+                </div>
+                <div class="flex md:hidden">
+                    <button type="button" class="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600" aria-label="toggle menu" id="mobile-menu-button">
+                        <svg viewBox="0 0 24 24" class="h-6 w-6 fill-current">
+                            <path fill-rule="evenodd" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="hidden md:flex items-center" id="mobile-menu">
+                <div class="flex flex-col md:flex-row md:mx-6">
+                    <a class="my-1 text-sm font-medium text-gray-700 hover:text-indigo-500 md:mx-4 md:my-0" href="index.html">Home</a>
+                    <a class="my-1 text-sm font-medium text-gray-700 hover:text-indigo-500 md:mx-4 md:my-0" href="about.html">About Us</a>
+                    <a class="my-1 text-sm font-medium text-gray-700 hover:text-indigo-500 md:mx-4 md:my-0" href="services.html">Services</a>
+                    <a class="my-1 text-sm font-medium text-gray-700 hover:text-indigo-500 md:mx-4 md:my-0" href="contact.html">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="pt-16 pb-8 bg-gradient-to-r from-blue-100 via-indigo-50 to-purple-100">
+            <div class="container mx-auto px-6 text-center" data-aos="fade-in">
+                <h1 class="text-4xl font-bold text-indigo-800">Get In Touch</h1>
+                <p class="mt-2 text-lg text-gray-600">We're here to help. Contact Vextor in Ahmedabad for your Salesforce needs.</p>
+            </div>
+        </section>
+
+        <section class="py-16 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+                    <div class="bg-white p-8 rounded-lg shadow-lg" data-aos="fade-right">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Send Us a Message</h2>
+                        <form id="contact-form" class="space-y-6">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                                <input type="text" name="name" id="name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Your Name">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                                <input type="email" name="email" id="email" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="you@example.com">
+                            </div>
+                             <div>
+                                <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+                                <textarea id="message" name="message" rows="5" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="How can we help you?"></textarea>
+                            </div>
+                            <div>
+                                <button type="submit" class="w-full inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-base font-medium rounded-md text-white gradient-primary hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300">
+                                    Send Message
+                                </button>
+                            </div>
+                             <div id="form-feedback" class="mt-4 text-center text-sm"></div>
+                        </form>
+                    </div>
+
+                    <div data-aos="fade-left">
+                        <div class="bg-white p-8 rounded-lg shadow-lg mb-8">
+                            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Contact Information</h2>
+                            <div class="space-y-4 text-gray-700">
+                                <div class="flex items-start">
+                                    <i data-feather="map-pin" class="w-6 h-6 text-indigo-500 mr-4 mt-1 flex-shrink-0"></i>
+                                    <div>
+                                        <h4 class="font-medium text-gray-800">Address</h4>
+                                        <p>123 Innovation Drive, Tech Park,<br>Off SG Highway, Bodakdev,<br>Ahmedabad, Gujarat 380054, India</p>
+                                        <p class="text-sm text-gray-500">(Our Headquarters in Ahmedabad)</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                     <i data-feather="mail" class="w-6 h-6 text-indigo-500 mr-4 mt-1 flex-shrink-0"></i>
+                                     <div>
+                                        <h4 class="font-medium text-gray-800">Email</h4>
+                                        <a href="mailto:info@vextor.com" class="hover:text-indigo-600 transition duration-300">info@vextor.com</a>
+                                     </div>
+                                </div>
+                                <div class="flex items-start">
+                                     <i data-feather="phone" class="w-6 h-6 text-indigo-500 mr-4 mt-1 flex-shrink-0"></i>
+                                      <div>
+                                        <h4 class="font-medium text-gray-800">Phone</h4>
+                                        <a href="tel:+919876543210" class="hover:text-indigo-600 transition duration-300">+91 98765 43210</a>
+                                      </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rounded-lg shadow-lg overflow-hidden">
+                             <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d58750.5229927634!2d72.4971168002256!3d23.02903204141401!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e84f514749f69%3A0xe199f323bfb13a18!2sBodakdev%2C%20Ahmedabad%2C%20Gujarat!5e0!3m2!1sen!2sin!4v1678886000000!5m2!1sen!2sin"
+                                width="100%"
+                                height="350"
+                                style="border:0;"
+                                allowfullscreen=""
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"
+                                title="Vextor Location Map - Ahmedabad Area">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+     <footer class="bg-gray-800 text-gray-300 py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+                <div>
+                    <h5 class="text-xl font-bold text-white mb-3">Vextor</h5>
+                    <p class="text-sm mb-3">Empowering Businesses with Salesforce Excellence.</p>
+                    <p class="text-sm"><i data-feather="map-pin" class="inline w-4 h-4 mr-1"></i> Ahmedabad, Gujarat, India</p>
+                </div>
+                <div>
+                    <h5 class="text-lg font-semibold text-white mb-3">Quick Links</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html" class="hover:text-white transition duration-300">Home</a></li>
+                        <li><a href="about.html" class="hover:text-white transition duration-300">About Us</a></li>
+                        <li><a href="services.html" class="hover:text-white transition duration-300">Services</a></li>
+                        <li><a href="contact.html" class="hover:text-white transition duration-300">Contact Us</a></li>
+                    </ul>
+                </div>
+                 <div>
+                    <h5 class="text-lg font-semibold text-white mb-3">Contact</h5>
+                     <ul class="space-y-2 text-sm">
+                        <li><a href="mailto:info@vextor.com" class="hover:text-white transition duration-300"><i data-feather="mail" class="inline w-4 h-4 mr-2"></i>info@vextor.com</a></li>
+                        <li><a href="tel:+919876543210" class="hover:text-white transition duration-300"><i data-feather="phone" class="inline w-4 h-4 mr-2"></i>+91 98765 43210</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center text-sm">
+                <p>© <span id="current-year"></span> Vextor. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        feather.replace();
+    </script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+          duration: 800,
+          once: true,
+      });
+    </script>
+    <script src="script.js"></script>
+
+</body>
+</html>
